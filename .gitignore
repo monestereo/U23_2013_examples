@@ -1,2 +1,5 @@
 obj
 *.map
+node-modules
+trace.txt
+trace-full.txt
