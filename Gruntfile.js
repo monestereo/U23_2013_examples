@@ -1,6 +1,5 @@
 var spawn = require("child_process").spawn;
 var exec = require("child_process").exec;
-
 module.exports = function (grunt) {
   // kill cmds on Ctrl+C
   process.openStdin().on("keypress", function(chunk, key) {
@@ -17,15 +16,38 @@ module.exports = function (grunt) {
   grunt.registerTask(
     'default',
     [
-    //  'upload',
+      'upload',
       'openocd',
       'trace'
     ]
   );
 
+  grunt.registerTask('list', 'list all available projects', function() {
+    var done = this.async();
+    exec('ls -d ./examples/*/', function(err, stdout, stderr) {
+      if (stdout) {
+        grunt.log.writeln('###### Examples ######');
+        var examples = stdout.split(/\r\n|\r|\n/g);
+        for (var exmpl in examples) {
+          grunt.log.writeln(examples[exmpl].replace('./examples/', '').replace('/', ''));
+        }
+      }
+      exec('ls -d ./apps/*/', function(err, stdout, stderr) {
+        if (stdout) {
+          grunt.log.writeln('###### Apps ######');
+          var apps = stdout.split(/\r\n|\r|\n/g);
+          for (var app in apps) {
+            grunt.log.writeln(apps[app].replace('./apps/', '').replace('/', ''));
+          }
+        }
+        done();
+      });
+    });
+  });
+
   // upload script to board
   grunt.registerTask('upload', 'upload script', function() {
-
+    console.log(this.args);
     var done = this.async();
 
     var cmd = 'make upload-fast';
