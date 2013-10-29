@@ -47,7 +47,6 @@ module.exports = function (grunt) {
 
   // upload script to board
   grunt.registerTask('upload', 'upload script', function() {
-    console.log(this.args);
     var done = this.async();
 
     var cmd = 'make upload-fast';
